@@ -15,8 +15,10 @@ def _convert_to_json(node: ET.Element) -> Dict:
         return result
     child = node[0]
     if len(child) == 0:
+        # node has only one child
         result[node.tag] = [_convert_to_json(child)]
     else:
+        # node has multiple children
         result[node.tag] = [{child.tag: [_convert_to_json(sub_child) for sub_child in child]} for child in node]
     return result
 
@@ -30,7 +32,7 @@ class ConverterViewSet(ViewSet):
     def convert(self, request, **kwargs):
         xml_file = request.FILES["file"]
         xml_elements = ET.fromstring(xml_file.read())
-        # from pprint import pprint
-        # pprint(_format(json_version)["Root"], sort_dicts=False)
         formatted_version = _convert_to_json(xml_elements)
+        # from pprint import pprint
+        # pprint(formatted_version, sort_dicts=False)
         return Response({k: v if v is not None else "" for k, v in formatted_version.items()})

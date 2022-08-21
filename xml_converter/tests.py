@@ -20,15 +20,6 @@ class XMLConversionTestCase(TestCase):
     #             "Root": "",
     #         })
     #
-    # def test_api_convert_empty_document(self):
-    #     with (TEST_DIR / Path('empty.xml')).open() as fp:
-    #         response = self.client.post('/api/converter/convert/', {
-    #             'file': fp,
-    #         })
-    #         self.assertEqual(response.status_code, 200)
-    #         self.assertEqual(response.json(), {
-    #             "Root": "",
-    #         })
     #
     # def test_connected_convert_addresses(self):
     #     with (TEST_DIR / Path('addresses.xml')).open() as fp:
@@ -57,34 +48,34 @@ class XMLConversionTestCase(TestCase):
     #                 },
     #             ],
     #         })
-    #
-    # def test_api_convert_addresses_document(self):
-    #     with (TEST_DIR / Path('addresses.xml')).open() as fp:
-    #         response = self.client.post('/api/converter/convert/', {
-    #             'file': fp,
-    #         })
-    #         self.assertEqual(response.status_code, 200)
-    #         self.assertEqual(response.json(), {
-    #             "Root": [
-    #                 {
-    #                     "Address": [
-    #                         {"StreetLine1": "123 Main St."},
-    #                         {"StreetLine2": "Suite 400"},
-    #                         {"City": "San Francisco"},
-    #                         {"State": "CA"},
-    #                         {"PostCode": "94103"},
-    #                     ]
-    #                 },
-    #                 {
-    #                     "Address": [
-    #                         {"StreetLine1": "400 Market St."},
-    #                         {"City": "San Francisco"},
-    #                         {"State": "CA"},
-    #                         {"PostCode": "94108"},
-    #                     ]
-    #                 },
-    #             ],
-    #         })
+
+    def test_api_convert_addresses_document(self):
+        with (TEST_DIR / Path('addresses.xml')).open() as fp:
+            response = self.client.post('/api/converter/convert/', {
+                'file': fp,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json(), {
+                "Root": [
+                    {
+                        "Address": [
+                            {"StreetLine1": "123 Main St."},
+                            {"StreetLine2": "Suite 400"},
+                            {"City": "San Francisco"},
+                            {"State": "CA"},
+                            {"PostCode": "94103"},
+                        ]
+                    },
+                    {
+                        "Address": [
+                            {"StreetLine1": "400 Market St."},
+                            {"City": "San Francisco"},
+                            {"State": "CA"},
+                            {"PostCode": "94108"},
+                        ]
+                    },
+                ],
+            })
 
     def test_api_convert_single_address_document(self):
         with (TEST_DIR / Path('single_address.xml')).open() as fp:
@@ -116,4 +107,14 @@ class XMLConversionTestCase(TestCase):
                 "Foo": [
                     {"Bar": "Baz"}
                 ]
+            })
+
+    def test_api_convert_empty_document(self):
+        with (TEST_DIR / Path('empty.xml')).open() as fp:
+            response = self.client.post('/api/converter/convert/', {
+                'file': fp,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json(), {
+                "Root": "",
             })
