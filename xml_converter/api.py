@@ -13,9 +13,11 @@ def _convert_to_json(node: ET.Element) -> Dict:
         # node is leaf (no more children)
         result[node.tag] = node.text
         return result
-    for child in node:
-        # node is non-leaf (has children)
+    child = node[0]
+    if len(child) == 0:
         result[node.tag] = [_convert_to_json(child)]
+    else:
+        result[node.tag] = [{child.tag: [_convert_to_json(sub_child) for sub_child in child]} for child in node]
     return result
 
 

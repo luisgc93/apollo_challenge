@@ -86,25 +86,25 @@ class XMLConversionTestCase(TestCase):
     #             ],
     #         })
 
-    # def test_api_convert_single_address_document(self):
-    #     with (TEST_DIR / Path('single_address.xml')).open() as fp:
-    #         response = self.client.post('/api/converter/convert/', {
-    #             'file': fp,
-    #         })
-    #         self.assertEqual(response.status_code, 200)
-    #         self.assertEqual(response.json(), {
-    #             "Root": [
-    #                 {
-    #                     "Address": [
-    #                         {"StreetLine1": "123 Main St."},
-    #                         {"StreetLine2": "Suite 400"},
-    #                         {"City": "San Francisco"},
-    #                         {"State": "CA"},
-    #                         {"PostCode": "94103"},
-    #                     ]
-    #                 }
-    #             ],
-    #         })
+    def test_api_convert_single_address_document(self):
+        with (TEST_DIR / Path('single_address.xml')).open() as fp:
+            response = self.client.post('/api/converter/convert/', {
+                'file': fp,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.json(), {
+                "Root": [
+                    {
+                        "Address": [
+                            {"StreetLine1": "123 Main St."},
+                            {"StreetLine2": "Suite 400"},
+                            {"City": "San Francisco"},
+                            {"State": "CA"},
+                            {"PostCode": "94103"},
+                        ]
+                    }
+                ],
+            })
 
     def test_api_convert_foobar_document(self):
         with (TEST_DIR / Path('foobar.xml')).open() as fp:
