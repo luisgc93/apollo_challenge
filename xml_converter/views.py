@@ -13,8 +13,8 @@ def upload_page(request):
         if form.is_valid():
             xml_file = request.FILES["file"]
             xml_elements = ET.fromstring(xml_file.read())
-            formatted_version = converter.xml_to_json(xml_elements)
-            return JsonResponse({k: v if v is not None else "" for k, v in formatted_version.items()})
+            json_data = converter.xml_to_json(xml_elements)
+            return JsonResponse(json_data)
         else:
             form = UploadFileForm()
         return render(request, 'upload_page.html', {'form': form})

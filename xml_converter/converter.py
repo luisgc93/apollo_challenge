@@ -7,7 +7,7 @@ def xml_to_json(node: ET.Element) -> Dict:
     result = {}
     if len(node) == 0:
         # node is leaf (no more children)
-        result[node.tag] = node.text
+        result[node.tag] = node.text if node.text else ""
         return result
     child = node[0]
     if len(child) == 0:

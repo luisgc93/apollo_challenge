@@ -1,5 +1,3 @@
-from typing import Dict
-
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
@@ -18,7 +16,7 @@ class ConverterViewSet(ViewSet):
     def convert(self, request, **kwargs):
         xml_file = request.FILES["file"]
         xml_elements = ET.fromstring(xml_file.read())
-        formatted_version = converter.xml_to_json(xml_elements)
+        json_data = converter.xml_to_json(xml_elements)
         # from pprint import pprint
         # pprint(formatted_version, sort_dicts=False)
-        return Response({k: v if v is not None else "" for k, v in formatted_version.items()})
+        return Response(json_data)
