@@ -1,7 +1,22 @@
+from typing import Dict
+
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
+import xml.etree.ElementTree as ET
+
+
+def _convert_to_json(node: ET.Element) -> Dict:
+    result = {}
+    if len(node) == 0:
+        # node is leaf (no more children)
+        result[node.tag] = node.text
+        return result
+    for child in node:
+        # node is non-leaf (has children)
+        result[node.tag] = [_convert_to_json(child)]
+    return result
 
 
 class ConverterViewSet(ViewSet):
@@ -11,5 +26,9 @@ class ConverterViewSet(ViewSet):
 
     @action(methods=["POST"], detail=False, url_path="convert")
     def convert(self, request, **kwargs):
-
-        return Response({})
+        xml_file = request.FILES["file"]
+        xml_elements = ET.fromstring(xml_file.read())
+        # from pprint import pprint
+        # pprint(_format(json_version)["Root"], sort_dicts=False)
+        formatted_version = _convert_to_json(xml_elements)
+        return Response({k: v if v is not None else "" for k, v in formatted_version.items()})
