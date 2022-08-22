@@ -11,8 +11,10 @@ def upload_page(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            xml_file = request.FILES["file"]
-            xml_elements = ET.fromstring(xml_file.read())
+            file = request.FILES["file"]
+            if file.content_type != "application/xml":
+                return JsonResponse(data={"error": "File type must be xml"}, status=422)
+            xml_elements = ET.fromstring(file.read())
             json_data = converter.xml_to_json(xml_elements)
             return JsonResponse(json_data)
         else:
