@@ -117,3 +117,11 @@ class XMLConversionTestCase(TestCase):
             self.assertEqual(response.json(), {
                 "Root": "",
             })
+
+    def test_api_returns_422_when_file_is_not_xml(self):
+        with (TEST_DIR / Path('data.csv')).open() as fp:
+            response = self.client.post('/api/converter/convert/', {
+                'file': fp,
+            })
+            self.assertEqual(response.status_code, 422)
+            self.assertEqual(response.json(), {"error": "File type must be xml"})
