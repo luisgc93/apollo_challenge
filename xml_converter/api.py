@@ -14,8 +14,10 @@ class ConverterViewSet(ViewSet):
 
     @action(methods=["POST"], detail=False, url_path="convert")
     def convert(self, request, **kwargs):
-        xml_file = request.FILES["file"]
-        xml_elements = ET.fromstring(xml_file.read())
+        file = request.FILES["file"]
+        if file.content_type != "application/xml":
+            return Response(data={"error": "File type must be xml"}, status=422)
+        xml_elements = ET.fromstring(file.read())
         json_data = converter.xml_to_json(xml_elements)
         # from pprint import pprint
         # pprint(formatted_version, sort_dicts=False)
