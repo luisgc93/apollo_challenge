@@ -48,6 +48,14 @@ class XMLConversionTestCase(TestCase):
                 ],
             })
 
+    def test_connected_returns_422_when_file_is_not_xml(self):
+        with (TEST_DIR / Path('data.csv')).open() as fp:
+            response = self.client.post('/connected/', {
+                'file': fp,
+            })
+            self.assertEqual(response.status_code, 422)
+            self.assertEqual(response.json(), {"error": "File type must be xml"})
+
     def test_api_convert_addresses_document(self):
         with (TEST_DIR / Path('addresses.xml')).open() as fp:
             response = self.client.post('/api/converter/convert/', {
